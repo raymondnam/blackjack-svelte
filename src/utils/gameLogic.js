@@ -1,6 +1,6 @@
 const symbols = ['&#9830', '&#9829', '&#9824', '&#9827'];
 const valueDictionary = {
-  A: 11,
+  A: 11, // TODO: handle 1, 10, 11 values
   '2': 2,
   '3': 3,
   '4': 4,
@@ -25,23 +25,8 @@ export const getRandomCard = () => {
 };
 
 export const getCardPoints = cards => {
-  const aces = cards.filter(card => card.value === 'A');
-  const otherCards = cards.filter(card => card.value !== 'A');
-
-  let currentTotal = otherCards.reduce((total, card) => {
+  return cards.reduce((total, card) => {
     const cardValue = valueDictionary[card.value];
     return total + cardValue;
   }, 0);
-
-  aces.forEach(ace => {
-    currentTotal += 11;
-    // if (currentTotal < 21) {
-    //   currentTotal += 9; // 10
-    // }
-    // if (currentTotal < 21) {
-    //   currentTotal += 1; // 11
-    // }
-  });
-
-  return currentTotal;
 };
