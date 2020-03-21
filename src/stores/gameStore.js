@@ -11,11 +11,11 @@ const initialState = {
   phase: 'BET',
 };
 
-function udpatePhase({ phase, playerPoints, housePoints }) {
+export function updatePhase({ phase, playerPoints, housePoints }) {
   if (playerPoints === 21) return 'WIN';
   if (playerPoints > 21) return 'LOST';
   if (phase === 'WAITING') {
-    return playerPoints > housePoints ? 'WIN' : 'LOST';
+    return housePoints > 21 || playerPoints > housePoints ? 'WIN' : 'LOST';
   }
   return phase;
 }
@@ -47,7 +47,7 @@ function calculatePoints(state) {
 function computeResults(state) {
   const { playerPoints, housePoints } = calculatePoints(state);
 
-  let phase = udpatePhase({
+  let phase = updatePhase({
     phase: state.phase,
     playerPoints,
     housePoints,
@@ -69,10 +69,10 @@ function computeResults(state) {
   };
 }
 
-function playHouseTurn(houseCards) {
+export function playHouseTurn(houseCards) {
   let cards = houseCards.map(card => ({ ...card, isHidden: false }));
   // TODO: draw more than 2 cards
-  return cards;
+  return [...cards, getRandomCard()];
 }
 
 function createStore() {
