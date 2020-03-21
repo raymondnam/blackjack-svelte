@@ -14,7 +14,7 @@
   <h1>Blackjack</h1>
   <div>chips: {$game.chips}</div>
   <div>
-    {#if $game.bet}BET: {$game.bet}{/if}
+    {#if $game.bet > 0}BET: {$game.bet}{/if}
   </div>
 
   {#if $game.phase === 'BET'}

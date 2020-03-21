@@ -8,51 +8,70 @@ const initialState = {
   housePoints: 0,
   bet: 0,
   chips: 1000,
-  winner: null,
   phase: 'BET',
 };
 
+function udpatePhase({ phase, playerPoints, housePoints }) {
+  if (playerPoints === 21) return 'WIN';
+  if (playerPoints > 21) return 'LOST';
+  if (phase === 'WAITING') {
+    return playerPoints > housePoints ? 'WIN' : 'LOST';
+  }
+  return phase;
+}
+
+function updateChips(state) {
+  const { phase, chips, bet } = state;
+  if (phase === 'WIN') {
+    return {
+      chips: chips + bet * 2,
+      bet: 0,
+    };
+  }
+  if (phase === 'LOST') {
+    return {
+      ...state,
+      bet: 0,
+    };
+  }
+  return state;
+}
+
 function calculatePoints(state) {
-  const playerPoints = getCardPoints(state.playerCards);
-  const housePoints = getCardPoints(
-    state.houseCards.filter(card => !card.isHidden),
-  );
+  return {
+    playerPoints: getCardPoints(state.playerCards),
+    housePoints: getCardPoints(state.houseCards.filter(card => !card.isHidden)),
+  };
+}
 
-  let updatedPhase = state.phase;
-  if (playerPoints === 21) {
-    updatedPhase = 'WIN';
-  } else if (playerPoints > 21) {
-    updatedPhase = 'LOST';
-  } else if (state.phase === 'WAITING') {
-    if (playerPoints > housePoints) {
-      updatedPhase = 'WIN';
-    } else {
-      updatedPhase = 'LOST';
-    }
-  }
-  let updatedBet = state.bet;
-  let updatedChips = state.chips;
+function computeResults(state) {
+  const { playerPoints, housePoints } = calculatePoints(state);
 
-  if (updatedPhase === 'WIN') {
-    updatedChips += state.bet * 2;
-    updatedBet = 0;
-  } else if (updatedPhase === 'LOST') {
-    updatedBet = 0;
-  }
+  let phase = udpatePhase({
+    phase: state.phase,
+    playerPoints,
+    housePoints,
+  });
+
+  const { bet, chips } = updateChips({
+    phase,
+    bet: state.bet,
+    chips: state.chips,
+  });
 
   return {
     ...state,
     playerPoints,
     housePoints,
-    phase: updatedPhase,
-    bet: updatedBet,
-    chips: updatedChips,
+    phase,
+    bet,
+    chips,
   };
 }
 
 function playHouseTurn(houseCards) {
   let cards = houseCards.map(card => ({ ...card, isHidden: false }));
-
+  // TODO: draw more than 2 cards
   return cards;
 }
 
@@ -62,14 +81,16 @@ function createStore() {
   return {
     subscribe,
     startGame: () => {
-      update(state => {
-        return calculatePoints({
+      update(state =>
+        computeResults({
           ...state,
           phase: 'PLAYING',
+          // draw 2 cards
           playerCards: [getRandomCard(), getRandomCard()],
+          // draw 2 cards (included 1 hidden)
           houseCards: [getRandomCard(), { ...getRandomCard(), isHidden: true }],
-        });
-      });
+        }),
+      );
     },
     placeBet: bet =>
       update(state => ({
@@ -79,14 +100,15 @@ function createStore() {
       })),
     hit: () =>
       update(state =>
-        calculatePoints({
+        computeResults({
           ...state,
+          // draw 1 card
           playerCards: [...state.playerCards, getRandomCard()],
         }),
       ),
     stand: () =>
       update(state =>
-        calculatePoints({
+        computeResults({
           ...state,
           houseCards: playHouseTurn(state.houseCards),
           phase: 'WAITING',
