@@ -80,7 +80,7 @@ function createStore() {
 
   return {
     subscribe,
-    startGame: () => {
+    deal: () => {
       update(state =>
         computeResults({
           ...state,
@@ -114,7 +114,7 @@ function createStore() {
           phase: 'WAITING',
         }),
       ),
-    continue: () =>
+    nextHand: () =>
       update(state => ({
         ...state,
         phase: 'BET',

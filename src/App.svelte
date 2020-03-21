@@ -24,7 +24,7 @@
       <BetButton bet={500} disabled={$game.chips < 500} />
     </div>
     {#if $game.bet > 0}
-      <button on:click={game.startGame}>DEAL</button>
+      <button on:click={game.deal}>DEAL</button>
     {/if}
   {/if}
 
@@ -50,7 +50,7 @@
   {/if}
 
   {#if $game.phase === 'LOST' || $game.phase === 'WIN'}
-    <button on:click={game.continue}>CONTINUE</button>
+    <button on:click={game.nextHand}>CONTINUE</button>
   {/if}
 
   {#if $game.phase === 'PLAYING'}
