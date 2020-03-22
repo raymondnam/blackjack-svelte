@@ -8,6 +8,10 @@ Classic casino card game built with [Svelte](https://svelte.dev).
 
 I just wanted to playing around with this new framework so I've decided to build a simplified version of a blackjack game.
 
+## Demo
+
+You can find a demo of this project [here](https://rn-blackjack-svelte.netlify.com/).
+
 ## Get started
 
 Install the dependencies...
