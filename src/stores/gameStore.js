@@ -71,8 +71,11 @@ function computeResults(state) {
 
 export function playHouseTurn(houseCards) {
   let cards = houseCards.map(card => ({ ...card, isHidden: false }));
-  // TODO: draw more than 2 cards
-  return [...cards, getRandomCard()];
+  const points = getCardPoints(cards);
+  if (points < 16) {
+    return [...cards, getRandomCard()];
+  }
+  return cards;
 }
 
 function createStore() {
