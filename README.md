@@ -1,5 +1,7 @@
 # Blackjack Game
 
+![logo](/public/images/logo.png)
+
 Classic casino card game built with [Svelte](https://svelte.dev).
 
 ## Background
