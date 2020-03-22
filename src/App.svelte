@@ -5,8 +5,19 @@
 </script>
 
 <style>
+  main {
+    background: #008240;
+    height: 100%;
+    padding: 56px;
+  }
+
   h1 {
-    color: green;
+    color: black;
+    margin: 0;
+  }
+
+  .hand {
+    display: flex;
   }
 </style>
 
@@ -31,14 +42,21 @@
   {#if $game.phase !== 'BET'}
     <h2>Player:</h2>
     <h3>Points: {$game.playerPoints}</h3>
-    {#each $game.playerCards as card}
-      <Card symbol={card.symbol} value={card.value} />
-    {/each}
+    <div class="hand">
+      {#each $game.playerCards as card}
+        <Card symbol={card.symbol} value={card.value} />
+      {/each}
+    </div>
     <h2>House:</h2>
     <h3>Points: {$game.housePoints}</h3>
-    {#each $game.houseCards as card}
-      <Card symbol={card.symbol} value={card.value} isHidden={card.isHidden} />
-    {/each}
+    <div class="hand">
+      {#each $game.houseCards as card}
+        <Card
+          symbol={card.symbol}
+          value={card.value}
+          isHidden={card.isHidden} />
+      {/each}
+    </div>
   {/if}
 
   {#if $game.phase === 'LOST'}

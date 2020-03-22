@@ -19,6 +19,7 @@
     width: 100px;
     height: 150px;
     margin: 8px;
+    background: white;
   }
 
   .symbol {
@@ -31,7 +32,8 @@
   }
 
   .isHidden {
-    background: #bbbbbb;
+    background: #f44336;
+    box-shadow: inset 0 0 0 5px white;
   }
 
   .number-bottom {
@@ -40,7 +42,7 @@
 </style>
 
 {#if isHidden}
-  <div class="wrapper" class:isHidden>&nbsp;</div>
+  <div class="wrapper" class:isHidden />
 {:else}
   <div class="wrapper" class:isRed>
     <div>{value}</div>
