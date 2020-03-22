@@ -16,10 +16,12 @@
     border-radius: 8px;
     padding: 16px;
     box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
-    width: 100px;
-    height: 150px;
+    width: 80px;
+    height: 120px;
     margin: 8px;
     background: white;
+    font-size: 20px;
+    font-weight: bold;
   }
 
   .symbol {

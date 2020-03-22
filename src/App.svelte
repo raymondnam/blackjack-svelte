@@ -2,30 +2,69 @@
   import Card from "./components/Card.svelte";
   import BetButton from "./components/BetButton.svelte";
   import { game } from "./stores";
+
+  const messages = {
+    LOST: "You lost.",
+    WIN: "You won!"
+  };
+  $: message = messages[$game.phase];
 </script>
 
 <style>
   main {
-    background: #008240;
     height: 100%;
     padding: 56px;
+    margin: 0 auto;
+    width: 500px;
+    text-align: center;
   }
 
-  h1 {
-    color: black;
-    margin: 0;
+  h2 {
+    color: white;
   }
 
   .hand {
     display: flex;
   }
+
+  button {
+    background-color: black;
+    border: none;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    padding: 8px 16px;
+    font-size: 16px;
+    margin: 4px 2px;
+    border-radius: 4px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  button:hover {
+    opacity: 0.9;
+  }
+
+  .actions {
+    margin-top: 32px;
+  }
+
+  .chips {
+    font-size: 18px;
+    margin-bottom: 16px;
+    font-weight: bold;
+  }
 </style>
 
 <main>
-  <h1>Blackjack</h1>
-  <div>chips: {$game.chips}</div>
-  <div>
-    {#if $game.bet > 0}BET: {$game.bet}{/if}
+  <img src="/images/logo.png" alt="logo" width="150" height="150" />
+
+  <div class="chips">Chips: {$game.chips}</div>
+  <div class="chips">
+    {#if $game.bet > 0}You're betting: {$game.bet}{/if}
   </div>
 
   {#if $game.phase === 'BET'}
@@ -35,20 +74,20 @@
       <BetButton bet={500} disabled={$game.chips < 500} />
     </div>
     {#if $game.bet > 0}
-      <button on:click={game.deal}>DEAL</button>
+      <div class="actions">
+        <button on:click={game.deal}>DEAL</button>
+      </div>
     {/if}
   {/if}
 
   {#if $game.phase !== 'BET'}
-    <h2>Player:</h2>
-    <h3>Points: {$game.playerPoints}</h3>
+    <h2>Player ({$game.playerPoints})</h2>
     <div class="hand">
       {#each $game.playerCards as card}
         <Card symbol={card.symbol} value={card.value} />
       {/each}
     </div>
-    <h2>House:</h2>
-    <h3>Points: {$game.housePoints}</h3>
+    <h2>Dealer ({$game.housePoints})</h2>
     <div class="hand">
       {#each $game.houseCards as card}
         <Card
@@ -59,23 +98,19 @@
     </div>
   {/if}
 
-  {#if $game.phase === 'LOST'}
-    <h2>YOU LOST</h2>
+  {#if message}
+    <h3>{message}</h3>
   {/if}
 
-  {#if $game.phase === 'WIN'}
-    <h2>YOU WIN</h2>
-  {/if}
+  <div class="actions">
+    {#if $game.phase === 'LOST' || $game.phase === 'WIN'}
+      <button on:click={game.nextHand}>CONTINUE</button>
+    {/if}
 
-  {#if $game.phase === 'LOST' || $game.phase === 'WIN'}
-    <button on:click={game.nextHand}>CONTINUE</button>
-  {/if}
-
-  {#if $game.phase === 'PLAYING'}
-    <div>
+    {#if $game.phase === 'PLAYING'}
       <button on:click={game.stand}>STAND</button>
       <button on:click={game.hit}>HIT</button>
-    </div>
-  {/if}
+    {/if}
+  </div>
 
 </main>
