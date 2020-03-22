@@ -24,8 +24,14 @@
     box-shadow: inset 0 0 0 5px black;
   }
 
-  button:hover {
-    background-color: #d6d6d6;
+  button:hover,
+  button:active {
+    background-color: 0.9;
+  }
+
+  button:disabled {
+    opacity: 0.3;
+    cursor: default;
   }
 </style>
 
