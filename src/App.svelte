@@ -15,7 +15,7 @@
     height: 100%;
     padding: 56px;
     margin: 0 auto;
-    width: 500px;
+    width: 400px;
     text-align: center;
   }
 
